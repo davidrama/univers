@@ -6,6 +6,11 @@
   
   roles:
     - role: ssh
+      tags: ssh
+    
+    - role: m4rcu5nl.zerotier-one
+      tags: zerotier
+
 
 - name: Clustering Consul
   hosts: consul
@@ -14,3 +19,4 @@
 
   roles:
     - role: consul
+      tags: consul 
