@@ -6,4 +6,11 @@
   
   roles:
     - role: ssh
-    - role: consul.common
+
+- name: Clustering Consul
+  hosts: consul
+  become: true
+  become_user: root
+
+  roles:
+    - role: consul
