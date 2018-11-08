@@ -1,4 +1,0 @@
-# Ignorez tous les fichier retry
-*.retry
-.vscode
-.gitignore
