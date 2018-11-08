@@ -1,0 +1,80 @@
+---
+- name: Install needed packages
+  apt: pkg={{ item }} update_cache=yes cache_valid_time=43200
+  become: true
+  with_items:
+       - curl 
+       - unzip 
+       - git  
+
+
+- name: Creating consul group
+  group:
+    name: consul
+    state: present
+
+- name: Creating consul user
+  user: 
+    name: consul
+    groups: 
+      - consul
+    state: present
+    system: no
+
+- name: Creating consul needed Dirs
+  file: 
+   path: "{{ item }}"
+   state: directory
+   owner: consul
+   group: consul
+   recurse: yes
+  with_items:
+    - "{{ consul_lib_dir }}"
+    - "{{ consul_data_dir }}"
+    - "{{ consul_config_dir }}"
+
+- name: Getting Consul Sha256 
+  get_url:
+    url: "{{ consul_sha256 }}"
+    dest: /tmp/consulSHA256UMS
+    force: yes
+
+- name: Getting SHA256 for ubuntu
+  shell: cat /tmp/consulSHA256UMS | grep linux_amd64 | awk -F ' ' '{print $1}'
+  register: sha256_value
+
+- debug:
+    msg: "Checksum: sha256:{{ sha256_value.stdout }}"
+
+- name: Getting Consul 
+  get_url:
+    url: "{{ consul_url }}"
+    dest: /tmp/consul.zip
+    checksum: 'sha256:{{ sha256_value.stdout }}'
+    force: yes
+
+- name: Installing Consul in /usr/local/bin
+  unarchive:
+    src: /tmp/consul.zip
+    dest: /usr/local/bin
+    mode: 755
+    owner: consul
+    group: consul
+    remote_src: yes
+
+- name: Cleaning /tmp 
+  file: 
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /tmp/consul.zip 
+    - /tmp/consulSHA256UMS
+
+- name: Starting bootstrap
+  template: src="consul_server.j2" dest="/etc/systemd/system/consul.service"
+
+- name: Starting Consul Servers
+  systemd:
+    name: consul
+    state: restarted 
+    daemon_reload: yes

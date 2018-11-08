@@ -1,0 +1,9 @@
+---
+- name: Setting up universe
+  hosts: all
+  become: true
+  become_user: root
+  
+  roles:
+    - role: ssh
+    - role: consul.common

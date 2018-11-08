@@ -1,0 +1,15 @@
+---
+consul_version: 1.3.0
+consul_url: https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_linux_amd64.zip
+consul_sha256: https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_SHA256SUMS
+
+consul_data_dir: /usr/share/consul
+consul_config_dir: /etc/consul.d
+consul_lib_dir: /var/lib/consul
+
+consul_advertized_ip: "{{ ansible_host }}"
+
+# create a key with "consul keygen" command
+consul_key: i/oATT/FOmkVgACE4zgbHQ==
+
+consul_server_options: "-server -ui -bootstrap-expect=3 -enable-script-checks=true -node={{ ansible_hostname }} -encrypt={{ consul_key }} -advertise={{ consul_advertized_ip }} -client={{ consul_advertized_ip }} -data-dir={{ consul_data_dir }}"

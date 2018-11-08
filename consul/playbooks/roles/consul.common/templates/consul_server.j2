@@ -1,0 +1,18 @@
+[Unit]
+Description=consul agent
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=consul
+Group=consul
+LimitNOFILE=1024
+PermissionsStartOnly=true
+ExecStart=/usr/local/bin/consul agent {{ consul_server_options }} {% for peer in groups['consul'] %} -retry-join="{{ hostvars[peer]['ansible_host'] }}:8301" {% endfor %}
+
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target
