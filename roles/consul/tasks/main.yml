@@ -43,9 +43,6 @@
   shell: cat /tmp/consulSHA256UMS | grep linux_amd64 | awk -F ' ' '{print $1}'
   register: sha256_value
 
-- debug:
-    msg: "Checksum: sha256:{{ sha256_value.stdout }}"
-
 - name: Getting Consul 
   get_url:
     url: "{{ consul_url }}"

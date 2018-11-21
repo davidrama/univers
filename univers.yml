@@ -3,7 +3,7 @@
   hosts: all
   become: true
   become_user: root
-  
+ 
   roles:
     - role: ssh
       tags: ssh
@@ -13,10 +13,20 @@
 
 
 - name: Clustering Consul
-  hosts: consul
+  hosts: consul-server
   become: true
   become_user: root
 
   roles:
     - role: consul
       tags: consul 
+  
+- name: Clustering Nomad
+  hosts: nomad
+  become: true
+  become_user: root
+
+  roles:
+    - role: brianshumate.nomad
+      tags: nomad
+

@@ -1,4 +1,12 @@
 ---
+- name: Updating the System
+  hosts: all
+  become: true
+  apt: 
+    upgrade: yes
+    update_cache: yes
+    cache_valid_time: 86400
+
 - name: Set authorized keys taken from url
   authorized_key:
     manage_dir: yes
@@ -20,3 +28,4 @@
     regexp: '^ubuntu ALL='
     line: 'ubuntu ALL=(ALL) NOPASSWD:ALL'
     validate: '/usr/sbin/visudo -cf %s'
+
