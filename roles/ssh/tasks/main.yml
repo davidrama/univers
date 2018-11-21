@@ -1,6 +1,5 @@
 ---
 - name: Updating the System
-  hosts: all
   become: true
   apt: 
     upgrade: yes
@@ -28,4 +27,7 @@
     regexp: '^ubuntu ALL='
     line: 'ubuntu ALL=(ALL) NOPASSWD:ALL'
     validate: '/usr/sbin/visudo -cf %s'
+
+
+
 
