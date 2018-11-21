@@ -1,4 +1,6 @@
 ---
+- name: Installing APT sources list
+  template: src="sources.list.j2" dest="/etc/apt/sources.list"
 - name: Updating the System
   become: true
   apt: 

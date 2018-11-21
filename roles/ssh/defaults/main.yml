@@ -4,3 +4,5 @@ gitusername:
 
 revokeuser:
   - hexapode
+
+ubuntu_version: "bionic"
